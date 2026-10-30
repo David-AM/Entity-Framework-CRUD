@@ -1,0 +1,10 @@
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# .NET build outputs
+bin/
+obj/
+*.user
+*.suo

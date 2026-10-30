@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.14" />
+    <Content Include="Services\ProductService.cs" />
+    <Content Include="Services\SupplierService.cs" />
+    <Content Include="Services\CategoryService.cs" />
+    <Content Include="Program.cs" />
+    <Content Include="Data\ProductDbContext.cs" />
+    <Content Include="Models\Product.cs" />
+    <Content Include="Models\Category.cs" />
+    <Content Include="Models\Supplier.cs" />
+  </ItemGroup>
+</Project>
