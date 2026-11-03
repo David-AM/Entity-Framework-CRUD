@@ -11,12 +11,12 @@ using Microsoft.IdentityModel.Tokens;
 namespace EF_CRUD.Services;
 
 public sealed class TokenService(
-    UserManager<ApplicationUser> userManager,
+    UserManager<IdentityUser> userManager,
     IOptions<JwtOptions> options) : ITokenService
 {
     private readonly JwtOptions _jwt = options.Value;
 
-    public async Task<AuthResponseDto> CreateTokenAsync(ApplicationUser user)
+    public async Task<AuthResponseDto> CreateTokenAsync(IdentityUser user)
     {
         var roles = await userManager.GetRolesAsync(user);
 

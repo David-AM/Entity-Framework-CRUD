@@ -35,7 +35,6 @@
     <Content Include="Dtos\ProductDtos.cs" />
     <Content Include="Dtos\SupplierDtos.cs" />
     <Content Include="Mappings\MappingProfile.cs" />
-    <Content Include="Models\ApplicationUser.cs" />
     <Content Include="Models\Category.cs" />
     <Content Include="Models\Product.cs" />
     <Content Include="Models\Supplier.cs" />

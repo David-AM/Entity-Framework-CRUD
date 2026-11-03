@@ -1,11 +1,12 @@
 using EF_CRUD.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EF_CRUD.Data;
 
 public sealed class ProductDbContext(DbContextOptions<ProductDbContext> options)
-    : IdentityDbContext<ApplicationUser>(options)
+    : IdentityDbContext<IdentityUser>(options)
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
@@ -15,11 +16,6 @@ public sealed class ProductDbContext(DbContextOptions<ProductDbContext> options)
     {
         // Must run first: it configures the Identity tables (users, roles, claims...).
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<ApplicationUser>(builder =>
-        {
-            builder.Property(user => user.FullName).HasMaxLength(100);
-        });
 
         modelBuilder.Entity<Category>(builder =>
         {

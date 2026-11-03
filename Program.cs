@@ -69,7 +69,7 @@ builder.Services.AddDbContext<ProductDbContext>(options =>
 
 #region Identity (users, roles, password hashing, lockout)
 builder.Services
-    .AddIdentityCore<ApplicationUser>(options =>
+    .AddIdentityCore<IdentityUser>(options =>
     {
         options.User.RequireUniqueEmail = true;
 

@@ -26,27 +26,24 @@ public static class DbSeeder
         }
 
         var config = services.GetRequiredService<IConfiguration>();
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
         await SeedUserAsync(
             userManager,
             config["Seed:AdminEmail"],
             config["Seed:AdminPassword"],
-            "Administrator",
             Roles.Admin);
 
         await SeedUserAsync(
             userManager,
             config["Seed:UserEmail"],
             config["Seed:UserPassword"],
-            config["Seed:UserFullName"] ?? "Seeded User",
             Roles.User);
     }
 
     private static async Task SeedUserAsync(
-        UserManager<ApplicationUser> userManager,
+        UserManager<IdentityUser> userManager,
         string? email,
         string? password,
-        string fullName,
         string role)
     {
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) return;
@@ -54,11 +51,10 @@ public static class DbSeeder
         var user = await userManager.FindByEmailAsync(email);
         if (user is null)
         {
-            user = new ApplicationUser
+            user = new IdentityUser
             {
                 UserName = email,
                 Email = email,
-                FullName = fullName,
                 EmailConfirmed = true
             };
 

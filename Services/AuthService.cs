@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 namespace EF_CRUD.Services;
 
 public sealed class AuthService(
-    UserManager<ApplicationUser> userManager,
+    UserManager<IdentityUser> userManager,
     ITokenService tokenService,
     IValidator<RegisterDto> registerValidator,
     IValidator<LoginDto> loginValidator) : IAuthService
@@ -24,11 +24,10 @@ public sealed class AuthService(
         if (await userManager.FindByEmailAsync(email) is not null)
             return ServiceResult<AuthResponseDto>.Conflict("An account with this email already exists.");
 
-        var user = new ApplicationUser
+        var user = new IdentityUser
         {
             UserName = email,
-            Email = email,
-            FullName = request.FullName?.Trim()
+            Email = email
         };
 
         var created = await userManager.CreateAsync(user, request.Password);

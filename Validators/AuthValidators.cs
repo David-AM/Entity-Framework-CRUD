@@ -21,8 +21,6 @@ public sealed class RegisterDtoValidator : AbstractValidator<RegisterDto>
             .Matches("[0-9]").WithMessage("Password must contain a digit.")
             .Matches("[^a-zA-Z0-9]").WithMessage("Password must contain a special character.");
 
-        RuleFor(x => x.FullName)
-            .MaximumLength(100);
     }
 }
 
