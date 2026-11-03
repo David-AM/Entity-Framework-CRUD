@@ -62,7 +62,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 #endregion
 
-#region database
+#region Database
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=ProductApi.db"));
 #endregion
@@ -127,14 +127,15 @@ builder.Services.AddAutoMapper(cfg =>
 #endregion
 #region FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<ProductRequestValidator>();
+#endregion
 
-// ---------- Repositories + Unit of Work ----------
+#region Repositories
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+#endregion
 
-// ---------- Services ----------
+#region Services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();

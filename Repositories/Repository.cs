@@ -15,6 +15,10 @@ public class Repository<T>(ProductDbContext context) : IRepository<T> where T : 
 
     public virtual Task<bool> ExistsAsync(int id) =>
         Set.AnyAsync(e => EF.Property<int>(e, "Id") == id);
+
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
+        Context.SaveChangesAsync(cancellationToken);
+
     public virtual void Add(T entity) => Set.Add(entity);
     public virtual void Remove(T entity) => Set.Remove(entity);
 }

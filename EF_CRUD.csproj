@@ -44,11 +44,9 @@
     <Content Include="Repositories\IProductRepository.cs" />
     <Content Include="Repositories\IRepository.cs" />
     <Content Include="Repositories\ISupplierRepository.cs" />
-    <Content Include="Repositories\IUnitOfWork.cs" />
     <Content Include="Repositories\ProductRepository.cs" />
     <Content Include="Repositories\Repository.cs" />
     <Content Include="Repositories\SupplierRepository.cs" />
-    <Content Include="Repositories\UnitOfWork.cs" />
     <Content Include="Services\AuthService.cs" />
     <Content Include="Services\CategoryService.cs" />
     <Content Include="Services\IAuthService.cs" />
@@ -61,11 +59,6 @@
     <Content Include="Validators\CategoryRequestValidator.cs" />
     <Content Include="Validators\ProductRequestValidator.cs" />
     <Content Include="Program.cs" />
-    <Content Include="appsettings.json" />
-    <Content Include="Data\Configurations\ApplicationUserConfiguration.cs" />
-    <Content Include="Data\Configurations\CategoryConfiguration.cs" />
-    <Content Include="Data\Configurations\ProductConfiguration.cs" />
-    <Content Include="Data\Configurations\SupplierConfiguration.cs" />
     <Content Include="Data\DbSeeder.cs" />
     <Content Include="Data\ProductDbContext.cs" />
   </ItemGroup>

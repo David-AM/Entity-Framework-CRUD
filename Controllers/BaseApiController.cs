@@ -8,7 +8,7 @@ namespace EF_CRUD.Controllers;
 [Produces("application/json")]
 public abstract class BaseApiController : ControllerBase
 {
-    /// <summary>Turns a ServiceResult<T>; into an HTTP response: 200/201 with the data, or a ProblemDetails error.</summary>
+    /// <summary>Turns a ServiceResult; into an HTTP response: 200/201 with the data, or a ProblemDetails error.</summary>
     protected IActionResult Respond<T>(
         ServiceResult<T> result,
         string? createdAtAction = null,

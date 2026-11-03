@@ -150,3 +150,4 @@ D:\Download\EF_CRUD-WebAPI\EF_CRUD\obj\Debug\net8.0\refint\EF_CRUD.dll
 D:\Download\EF_CRUD-WebAPI\EF_CRUD\obj\Debug\net8.0\EF_CRUD.pdb
 D:\Download\EF_CRUD-WebAPI\EF_CRUD\obj\Debug\net8.0\EF_CRUD.genruntimeconfig.cache
 D:\Download\EF_CRUD-WebAPI\EF_CRUD\obj\Debug\net8.0\ref\EF_CRUD.dll
+D:\Download\EF_CRUD-WebAPI\EF_CRUD\obj\Debug\net8.0\EF_CRUD.sourcelink.json

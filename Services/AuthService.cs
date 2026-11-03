@@ -38,6 +38,7 @@ public sealed class AuthService(
         var inRole = await userManager.AddToRoleAsync(user, Roles.User);
         if (!inRole.Succeeded)
             return IdentityFailure(inRole.Errors);
+            
         return ServiceResult<AuthResponseDto>.Created(await tokenService.CreateTokenAsync(user));
     }
 

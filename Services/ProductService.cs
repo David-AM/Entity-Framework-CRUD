@@ -8,19 +8,21 @@ using FluentValidation;
 namespace EF_CRUD.Services;
 
 public sealed class ProductService(
-    IUnitOfWork uow,
+    IProductRepository products,
+    ICategoryRepository categories,
+    ISupplierRepository suppliers,
     IMapper mapper,
     IValidator<ProductRequestDto> validator) : IProductService
 {
     public async Task<ServiceResult<IReadOnlyList<ProductDto>>> GetAllAsync()
     {
-        var products = await uow.Products.GetAllWithDetailsAsync();
-        return ServiceResult<IReadOnlyList<ProductDto>>.Success(mapper.Map<List<ProductDto>>(products));
+        var items = await products.GetAllWithDetailsAsync();
+        return ServiceResult<IReadOnlyList<ProductDto>>.Success(mapper.Map<List<ProductDto>>(items));
     }
 
     public async Task<ServiceResult<ProductDto>> GetByIdAsync(int id)
     {
-        var product = await uow.Products.GetByIdWithDetailsAsync(id);
+        var product = await products.GetByIdWithDetailsAsync(id);
         return product is null
             ? ServiceResult<ProductDto>.NotFound($"Product {id} was not found.")
             : ServiceResult<ProductDto>.Success(mapper.Map<ProductDto>(product));
@@ -34,17 +36,17 @@ public sealed class ProductService(
         var product = mapper.Map<Product>(request);
         product.Name = product.Name.Trim();
 
-        uow.Products.Add(product);
-        await uow.SaveChangesAsync();
+        products.Add(product);
+        await products.SaveChangesAsync();
 
         // Reload with Category and Supplier so the response contains their names.
-        var created = await uow.Products.GetByIdWithDetailsAsync(product.Id);
+        var created = await products.GetByIdWithDetailsAsync(product.Id);
         return ServiceResult<ProductDto>.Created(mapper.Map<ProductDto>(created!));
     }
 
     public async Task<ServiceResult<ProductDto>> UpdateAsync(int id, ProductRequestDto request)
     {
-        var product = await uow.Products.GetByIdAsync(id);
+        var product = await products.GetByIdAsync(id);
         if (product is null)
             return ServiceResult<ProductDto>.NotFound($"Product {id} was not found.");
 
@@ -53,20 +55,20 @@ public sealed class ProductService(
 
         mapper.Map(request, product); // copies the request values onto the tracked entity
         product.Name = product.Name.Trim();
-        await uow.SaveChangesAsync();
+        await products.SaveChangesAsync();
 
-        var updated = await uow.Products.GetByIdWithDetailsAsync(id);
+        var updated = await products.GetByIdWithDetailsAsync(id);
         return ServiceResult<ProductDto>.Success(mapper.Map<ProductDto>(updated!));
     }
 
     public async Task<ServiceResult> DeleteAsync(int id)
     {
-        var product = await uow.Products.GetByIdAsync(id);
+        var product = await products.GetByIdAsync(id);
         if (product is null)
             return ServiceResult.NotFound($"Product {id} was not found.");
 
-        uow.Products.Remove(product);
-        await uow.SaveChangesAsync();
+        products.Remove(product);
+        await products.SaveChangesAsync();
         return ServiceResult.Success();
     }
 
@@ -74,15 +76,25 @@ public sealed class ProductService(
     private async Task<ServiceResult<ProductDto>?> ValidateAsync(ProductRequestDto request)
     {
         var result = await validator.ValidateAsync(request);
-        if (!result.IsValid)
-            return ServiceResult<ProductDto>.Validation(result.ToErrorDictionary());
+        var errors = result.ToErrorDictionary()
+        .ToDictionary(x => x.Key, x => x.Value);
 
-        var errors = new Dictionary<string, string[]>();
-        if (!await uow.Categories.ExistsAsync(request.CategoryId))
-            errors[nameof(request.CategoryId)] = [$"Category {request.CategoryId} does not exist."];
-        if (!await uow.Suppliers.ExistsAsync(request.SupplierId))
-            errors[nameof(request.SupplierId)] = [$"Supplier {request.SupplierId} does not exist."];
+        if (request.CategoryId > 0 &&
+            !await categories.ExistsAsync(request.CategoryId))
+        {
+            errors[nameof(request.CategoryId)] =
+                [$"Category {request.CategoryId} does not exist."];
+        }
 
-        return errors.Count > 0 ? ServiceResult<ProductDto>.Validation(errors) : null;
+        if (request.SupplierId > 0 &&
+            !await suppliers.ExistsAsync(request.SupplierId))
+        {
+            errors[nameof(request.SupplierId)] =
+                [$"Supplier {request.SupplierId} does not exist."];
+        }
+
+        return errors.Count > 0
+            ? ServiceResult<ProductDto>.Validation(errors)
+            : null;
     }
 }
