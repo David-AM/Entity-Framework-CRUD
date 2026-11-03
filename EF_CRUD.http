@@ -1,0 +1,101 @@
+# Works in Visual Studio 2022+ and the VS Code "REST Client" extension.
+# 1. Run the API:  dotnet run
+# 2. Send "Login as admin" below, copy the "token" value from the response,
+#    and paste it into @token. Then try the other requests.
+
+@host = http://localhost:5080
+@token = PASTE_TOKEN_HERE
+
+### Register a normal user (role: User)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user1@example.com",
+  "password": "User#12345",
+  "fullName": "Test User"
+}
+
+### Login as admin (seeded in Development from appsettings.Development.json)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin#12345"
+}
+
+### List products (any signed-in user)
+GET {{host}}/api/products
+Authorization: Bearer {{token}}
+
+### Get one product
+GET {{host}}/api/products/1
+Authorization: Bearer {{token}}
+
+### Create a product (Admin only)
+POST {{host}}/api/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Mechanical Keyboard",
+  "price": 89.5,
+  "description": "Tenkeyless, brown switches",
+  "categoryId": 1,
+  "supplierId": 1
+}
+
+### Update a product (Admin only)
+PUT {{host}}/api/products/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Wireless Mouse",
+  "price": 24.99,
+  "description": "Ergonomic wireless mouse",
+  "categoryId": 1,
+  "supplierId": 1
+}
+
+### Delete a product (Admin only)
+DELETE {{host}}/api/products/1
+Authorization: Bearer {{token}}
+
+### Trigger validation errors (400 with per-field messages)
+POST {{host}}/api/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "price": -5,
+  "categoryId": 0,
+  "supplierId": 99
+}
+
+### Categories
+GET {{host}}/api/categories
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/api/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "name": "Furniture" }
+
+### Suppliers
+GET {{host}}/api/suppliers
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/api/suppliers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "name": "Moleskine" }
+
+### Without a token: expect 401
+GET {{host}}/api/products
